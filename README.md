@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Portfolio Website
 
-## Getting Started
+Welcome to the repository for my personal portfolio website! This project showcases my skills, projects, and experience as a Computer Science and Engineering student specializing in **Artificial Intelligence (AI)** and **Geographic Information Systems (GIS)**.
 
-First, run the development server:
+## 🖥️ Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[View the Live Site](https://Abadi2225.github.io/personal-portfolio)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📋 Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This portfolio website includes the following sections:
+- **Hero Section**: A welcoming section with animations to introduce myself.
+- **About Me**: A detailed introduction, highlighting my technical journey and passions.
+- **Skills**: Showcases technical proficiencies in programming, AI, GIS, and design tools.
+- **Projects (Coming soon)**: Highlights selected projects with descriptions, images, and links.
+- **Contact**: Provides multiple ways to connect, including email and social links.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔧 Tech Stack
 
-## Learn More
+The website is built using modern tools and technologies:
+- **Next.js**: Framework for server-side rendering and static site generation.
+- **Tailwind CSS**: Utility-first CSS framework for styling and responsive design.
+- **Framer Motion & GSAP**: Libraries for smooth animations and transitions.
+- **Blobity Cursor**: Adds a unique interactive cursor effect.
+- **TypeScript**: Ensures type safety and better development practices.
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Dynamic Animations**: Interactive text, magnetic buttons, and smooth motion effects with Framer Motion and GSAP.
+- **Blobity Cursor Integration**: A custom cursor for enhanced interactivity.
+- **Responsive Design**: Optimized for all devices, from mobile phones to desktops.
+- **Lazy Loading & Performance Optimizations**: Components dynamically load to improve site speed.
+- **Custom Components**:
+  - Animated sections like `Hero`, `About`, and `Contact`.
+  - Reusable magnetic button effects (`FramerMagnetic`).
+- **SEO Friendly**: Metadata and smooth navigation for an optimized user experience.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Project Structure
 
-## Deploy on Vercel
+The project is structured for scalability and ease of maintenance:
+- **Components**: Modular components like `Hero`, `Navbar`, `About`, etc.
+- **Animations**: Reusable animation configurations using Framer Motion and GSAP.
+- **Utilities**: Helper functions and configurations, such as `BlobityConfig`.
+- **Global Styles**: Consistent design achieved with Tailwind CSS.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📈 Future Enhancements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Planned updates include:
+- Adding the **Projects** section after developing a few porjects.
+- Adding a **Personal AI** to help with answering questions.
