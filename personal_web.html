@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Abdullah Felemban - AI & Cybersecurity Portfolio">
+    
+    <title>Abdullah</title>
+
+    <link rel="icon" type="image/png" href="icon.ico">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: { DEFAULT: '#0f172a', dark: '#020617', card: 'rgba(30, 41, 59, 0.5)' },
+                        accent: { DEFAULT: '#38bdf8', dim: 'rgba(56, 189, 248, 0.1)', glow: 'rgba(56, 189, 248, 0.5)' },
+                        text: { main: '#f8fafc', muted: '#94a3b8' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    },
+                    cursor: { 'none': 'none' }
+                }
+            }
+        }
+    </script>
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        html { scroll-behavior: smooth; cursor: none; }
+        @media (hover: none) { html { cursor: auto; } .custom-cursor { display: none !important; } }
+        body { background-color: #020617; color: #f8fafc; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        .scanlines { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.02) 50%, rgba(0,0,0,0.02)); background-size: 100% 4px; position: fixed; top: 0; right: 0; bottom: 0; left: 0; pointer-events: none; z-index: 50; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+
+        /* SYSTEM CORE */
+        .core-scene { width: 260px; height: 260px; perspective: 1000px; transform-style: preserve-3d; }
+        .loader-sphere { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: sphereRotate 30s linear infinite; }
+        .load-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; transform-style: preserve-3d; }
+        .load-ring::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(56, 189, 248, 0.05); }
+        .load-ring::after { content: ''; position: absolute; inset: -1px; border-radius: 50%; border: 2px solid transparent; border-top-color: #38bdf8; border-right-color: #38bdf8; animation: loaderSpin 4s linear infinite, loaderPulse 3s ease-in-out infinite alternate; box-shadow: 0 0 8px rgba(56, 189, 248, 0.2); }
+        @keyframes sphereRotate { 0% { transform: rotateY(0deg) rotateX(0deg); } 100% { transform: rotateY(360deg) rotateX(0deg); } }
+        @keyframes loaderSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes loaderPulse { 0% { opacity: 0.2; } 50% { opacity: 0.8; } 100% { opacity: 0.4; } }
+        .lr-1 { transform: rotateY(0deg); } .lr-2 { transform: rotateY(30deg); } .lr-3 { transform: rotateY(60deg); } .lr-4 { transform: rotateY(90deg); } .lr-5 { transform: rotateY(120deg); } .lr-6 { transform: rotateY(150deg); } .lr-7 { transform: rotateX(90deg) rotateY(0deg); } .lr-8 { transform: rotateX(90deg) rotateY(30deg); } .lr-9 { transform: rotateX(90deg) rotateY(60deg); } .lr-10 { transform: rotateX(90deg) rotateY(90deg); } .lr-11 { transform: rotateX(90deg) rotateY(120deg); } .lr-12 { transform: rotateX(90deg) rotateY(150deg); }
+        .load-ring:nth-child(odd)::after { animation-duration: 6s; animation-delay: 0.5s; } .load-ring:nth-child(even)::after { animation-duration: 4s; animation-direction: reverse; }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { motion, AnimatePresence, useSpring, useMotionValue } = window.Motion;
+
+        const DATA = {
+            identity: {
+                name: "Abdullah",
+                surname: "Felemban",
+                role: "AI & Cybersecurity",
+                status: "Seeking Opportunities",
+                bio: "Computer Science & Engineering student specializing in AI with a 4.0 GPA. I build frameworks that blend Machine Learning with Cybersecurity to detect threats and misinformation."
+            },
+            education: {
+                school: "The Ohio State University",
+                degree: "B.S. Computer Science & Engineering",
+                minor: "Minor Geographic Info Science (GIS)",
+                gpa: "4.0 / 4.0",
+                honors: ["Dean's List (4 Semesters)", "Custodian of the Two Holy Mosques Scholarship"],
+                grad: "May 2027"
+            },
+            experience: [
+                {
+                    type: "internship",
+                    role: "Summer Research Intern",
+                    company: "KFUPM Research Lab",
+                    date: "Jun 2025 - Aug 2025",
+                    location: "Dhahran, SA",
+                    desc: "Led research resulting in Best Paper Award at ACM CCS 2025. Built a novel three-stage LLM pipeline (RAG) to detect rhetorical exaggeration in cybersecurity news, achieving 60% accuracy against expert consensus."
+                },
+                {
+                    type: "internship",
+                    role: "Technology Solutions Intern",
+                    company: "First City",
+                    date: "May 2025",
+                    location: "Mecca, SA",
+                    desc: "Prevented critical deployment failures in 'TasleemGPT' LLM before government-wide launch. Improved workflow efficiency through rigorous data validation for the Ministry of Hajj and Umrah."
+                },
+                {
+                    type: "leadership",
+                    role: "Cybersecurity Competitor",
+                    company: "Buckeye CTF",
+                    date: "2023 - 2025",
+                    location: "Columbus, OH",
+                    desc: "Competed in 48-hour reverse engineering & crypto challenges. Ranked top 25% of 200+ participants."
+                },
+                {
+                    type: "leadership",
+                    role: "Peer Tutor",
+                    company: "Volunteer",
+                    date: "2014 - Present",
+                    location: "Remote / On-site",
+                    desc: "Tutored 20+ students in Math, CS, and Chemistry. Helped peers gain admission to top universities."
+                }
+            ],
+            publication: {
+                title: "Exaggeration-based Fake Cybersecurity News Detection",
+                conference: "ACM CCS 2025",
+                workshop: "3D-Sec Workshop",
+                award: "🏆 Best Paper Award",
+                details: "First Author. Pioneered graded exaggeration scoring (1-3 scale) for cybersecurity tweets using a novel framework validated against 13 industry experts."
+            },
+            projects: [
+                {
+                    title: "Personal Portfolio",
+                    tech: "React • Tailwind • Framer Motion",
+                    desc: "A simple personal portfolio website showcasing my skills, experiences, and projects",
+                    githubUrl: "https://github.com/Abadi2225/personal-website",
+                    logo: "icon.ico"
+                }
+            ],
+            skills: {
+                languages: ["Python", "C", "Java", "Django", "MATLAB", "SQL"],
+                ai: ["LLMs", "DSPy", "LangChain", "RAG"],
+                tools: ["Git", "Linux"]
+            },
+            socials: {
+                email: "abdullahefelemban@gmail.com",
+                github: "https://github.com/Abadi2225",
+                linkedin: "https://www.linkedin.com/in/abdullahefelemban/"
+            },
+        };
+
+        // --- 1. Cursor ---
+        const CustomCursor = () => {
+            const cursorX = useMotionValue(-100);
+            const cursorY = useMotionValue(-100);
+            const [isHovering, setIsHovering] = useState(false);
+            const springConfig = { damping: 80, stiffness: 2000 };
+            const cursorXSpring = useSpring(cursorX, springConfig);
+            const cursorYSpring = useSpring(cursorY, springConfig);
+
+            useEffect(() => {
+                const moveCursor = (e) => { cursorX.set(e.clientX); cursorY.set(e.clientY); };
+                const handleMouseOver = (e) => setIsHovering(!!(e.target.closest('a') || e.target.closest('button') || e.target.closest('.interactive-card')));
+                window.addEventListener('mousemove', moveCursor);
+                window.addEventListener('mouseover', handleMouseOver);
+                return () => { window.removeEventListener('mousemove', moveCursor); window.removeEventListener('mouseover', handleMouseOver); };
+            }, []);
+
+            return (
+                <div className="custom-cursor pointer-events-none fixed inset-0 z-[9999] hidden md:block">
+                    <motion.div className="absolute w-1.5 h-1.5 bg-accent rounded-full" style={{ x: cursorX, y: cursorY, translateX: '-50%', translateY: '-50%' }} />
+                    <motion.div className="absolute rounded-full border border-accent/30"
+                        style={{ x: cursorXSpring, y: cursorYSpring, translateX: '-50%', translateY: '-50%' }}
+                        animate={{ width: isHovering ? 50 : 24, height: isHovering ? 50 : 24, opacity: isHovering ? 1 : 0.5, scale: isHovering ? 1.1 : 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }} />
+                </div>
+            );
+        };
+
+        // --- 2. Components ---
+        const SystemCore = () => (
+            <div className="core-scene my-12 md:mb-0 md:mr-12 scale-75 md:scale-100 opacity-90">
+                <div className="loader-sphere">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-accent/10 rounded-full blur-3xl"></div>
+                    {[...Array(12)].map((_, i) => <div key={i} className={`load-ring lr-${i+1}`}></div>)}
+                </div>
+            </div>
+        );
+
+        const Navbar = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const scrollTo = (id) => { setIsOpen(false); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); };
+
+            return (
+                <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} className="fixed top-0 w-full z-50 bg-bg-dark/80 backdrop-blur-md border-b border-slate-800/50 px-6 py-4">
+                    <div className="max-w-7xl mx-auto flex justify-between items-center">
+                        <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                            <div className="w-2 h-2 bg-accent rounded-full"></div>
+                            <span className="font-heading font-bold text-xl tracking-tight text-white">
+                                Abdullah<span className="text-accent">.ai</span>
+                            </span>
+                        </div>
+                        <div className="hidden md:flex gap-8 text-sm font-medium text-text-muted">
+                            {['About', 'Publications', 'Experience', 'Projects'].map((item) => (
+                                <button key={item} onClick={() => scrollTo(item.toLowerCase())} className="hover:text-accent transition-colors">
+                                    {item}
+                                </button>
+                            ))}
+                        </div>
+                        <button className="md:hidden text-text-muted hover:text-accent" onClick={() => setIsOpen(!isOpen)}>
+                            <i data-lucide={isOpen ? "x" : "menu"}></i>
+                        </button>
+                    </div>
+                    <AnimatePresence>
+                        {isOpen && (
+                            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="md:hidden bg-bg-dark border-b border-slate-800 overflow-hidden">
+                                <div className="flex flex-col p-6 gap-4 text-sm text-text-muted">
+                                    {['About', 'Publications', 'Experience', 'Projects'].map((item) => (
+                                        <button key={item} onClick={() => scrollTo(item.toLowerCase())} className="text-left py-2 hover:text-accent border-b border-slate-800/50">
+                                            {item}
+                                        </button>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.nav>
+            );
+        };
+
+        const Hero = () => (
+            <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-20 pt-20 max-w-7xl mx-auto">
+                <div className="absolute left-6 md:left-10 top-0 bottom-0 w-px bg-slate-800/50"></div>
+                <div className="ml-4 md:ml-16 flex flex-col md:flex-row items-center md:items-center justify-between gap-12">
+                    <div className="w-full max-w-2xl">
+                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 flex items-center gap-3">
+                            <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-semibold tracking-wider">
+                                {DATA.identity.status}
+                            </span>
+                        </motion.div>
+                        <h1 className="font-heading font-bold text-5xl md:text-7xl text-white leading-tight mb-4 tracking-tight">
+                            {DATA.identity.name} <span className="text-slate-500">{DATA.identity.surname}</span>
+                        </h1>
+                        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-lg md:text-xl text-accent font-medium mb-8">
+                            {DATA.identity.role}
+                        </motion.p>
+                        <div className="flex flex-wrap gap-4">
+                            <SocialBtn 
+                                icon="mail" 
+                                label="Contact" 
+                                link={`mailto:${DATA.socials.email}`} 
+                            />
+                            <SocialBtn 
+                                icon="github" 
+                                label="GitHub" 
+                                link={DATA.socials.github} 
+                            />
+                            <SocialBtn 
+                                icon="linkedin" 
+                                label="LinkedIn" 
+                                link={DATA.socials.linkedin} 
+                            />
+                        </div>
+                    </div>
+                    <div><SystemCore /></div>
+                </div>
+            </section>
+        );
+
+        const SocialBtn = ({ icon, label, link }) => (
+            <a 
+                href={link} 
+                target={link.startsWith('mailto') ? "_self" : "_blank"} 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 bg-slate-800/50 hover:border-accent hover:bg-accent/5 text-text-muted hover:text-white transition-all duration-300 cursor-pointer"
+            >
+                <i data-lucide={icon} className="w-4 h-4"></i>
+                <span className="text-sm font-medium">{label}</span>
+            </a>
+        );
+
+        const SectionHeader = ({ title, icon }) => (
+            <div className="flex items-center gap-3 mb-12">
+                <div className="p-2 rounded-md bg-accent/10 text-accent"><i data-lucide={icon} className="w-5 h-5"></i></div>
+                <h2 className="font-heading font-bold text-3xl text-white tracking-tight">{title}</h2>
+            </div>
+        );
+
+        const About = () => (
+            <section id="about" className="py-24 px-6 md:px-20 max-w-7xl mx-auto border-t border-slate-800/50">
+                <SectionHeader title="About Me" icon="user" />
+                
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8 md:p-12 relative overflow-hidden">
+                    {/* Glow Effect */}
+                    <div className="absolute top-0 right-0 p-40 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                    
+                    <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-start">
+                        {/* Left: Bio */}
+                        <div>
+                            <h3 className="font-heading text-2xl font-bold text-white mb-6">Profile</h3>
+                            <p className="text-lg text-slate-300 leading-relaxed mb-8">
+                                {DATA.identity.bio}
+                            </p>
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-accent"><i data-lucide="brain-circuit" className="w-6 h-6"></i></div>
+                                    <div><h4 className="text-white font-bold">AI & ML</h4><p className="text-sm text-slate-400">Specialized in LLMs & RAG</p></div>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-accent"><i data-lucide="shield-alert" className="w-6 h-6"></i></div>
+                                    <div><h4 className="text-white font-bold">Cybersecurity</h4><p className="text-sm text-slate-400">Threat Intel & Defense</p></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right: Education & Skills Combined */}
+                        <div className="space-y-10">
+                            {/* Education */}
+                            <div>
+                                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Education</h3>
+                                <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
+                                    <h4 className="font-heading text-xl font-bold text-white mb-1">{DATA.education.school}</h4>
+                                    <p className="text-accent font-medium mb-2">{DATA.education.degree}</p>
+                                    <p className="text-sm text-slate-400 mb-4">{DATA.education.minor}</p>
+                                    <div className="flex gap-6 text-sm border-t border-slate-800 pt-4">
+                                        <div><span className="text-slate-500 mr-2">GPA:</span><span className="text-white font-mono">4.0</span></div>
+                                        <div><span className="text-slate-500 mr-2">Grad:</span><span className="text-white font-mono">2027</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Skills */}
+                            <div>
+                                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Technical Arsenal</h3>
+                                <div className="space-y-6">
+                                    {Object.entries(DATA.skills).map(([cat, skills], i) => (
+                                        <div key={i}>
+                                            <span className="text-xs text-slate-400 block mb-2 capitalize">{cat}</span>
+                                            <div className="flex flex-wrap gap-2">
+                                                {skills.map((skill, j) => (
+                                                    <span key={j} className="px-3 py-1.5 rounded-md bg-slate-800 text-xs font-medium text-slate-300 border border-slate-700 cursor-default hover:border-accent/50 transition-colors">{skill}</span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Publications = () => (
+            <section id="publications" className="py-24 px-6 md:px-20 max-w-7xl mx-auto">
+                <SectionHeader title="Research & Publications" icon="book-open" />
+                <div className="rounded-2xl border border-accent/30 bg-accent/5 p-8 md:p-12 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 blur-[100px] rounded-full"></div>
+                    <div className="relative z-10">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-xs font-bold mb-6">
+                            <i data-lucide="trophy" className="w-3 h-3"></i>
+                            {DATA.publication.award}
+                        </div>
+                        <h3 className="font-heading text-2xl md:text-4xl font-bold text-white mb-4 leading-tight">
+                            {DATA.publication.title}
+                        </h3>
+                        <div className="flex flex-wrap gap-4 text-sm font-mono text-slate-400 mb-8">
+                            <span>{DATA.publication.conference}</span>
+                            <span className="text-slate-600">|</span>
+                            <span className="text-accent">{DATA.publication.workshop}</span>
+                        </div>
+                        <p className="text-lg text-slate-300 max-w-3xl leading-relaxed mb-8">
+                            {DATA.publication.details}
+                        </p>
+                        
+                        {/* ADD LINK HERE: Replace # with your link and uncomment the href */}
+                        <a 
+                            /* href="YOUR_LINK_HERE" */
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-accent/30 bg-accent/10 text-accent font-medium hover:bg-accent/20 hover:border-accent hover:text-white hover:shadow-[0_0_20px_rgba(56,189,248,0.4)] transition-all duration-300 cursor-pointer group"
+                        >
+                            Read Paper <i data-lucide="arrow-right" className="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Experience = () => {
+            const [hoveredId, setHoveredId] = useState(null);
+
+            return (
+                <section id="experience" className="py-24 px-6 md:px-20 max-w-7xl mx-auto bg-[#030712]">
+                    <SectionHeader title="Experience" icon="briefcase" />
+                    <div className="space-y-4">
+                        {DATA.experience.map((job, index) => (
+                            <div 
+                                key={index}
+                                className="interactive-card group relative border-l-2 border-slate-800 hover:border-accent pl-6 py-2 transition-colors duration-300 cursor-pointer"
+                                onMouseEnter={() => setHoveredId(index)}
+                                onMouseLeave={() => setHoveredId(null)}
+                                onClick={() => setHoveredId(hoveredId === index ? null : index)}
+                            >
+                                <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">{job.role}</h3>
+                                        <p className="text-sm text-slate-400 font-medium">{job.company} • {job.location}</p>
+                                    </div>
+                                    <div className="mt-2 md:mt-0">
+                                        <span className="text-xs font-mono text-slate-500 group-hover:text-white transition-colors bg-slate-900 px-2 py-1 rounded">{job.date}</span>
+                                    </div>
+                                </div>
+                                
+                                <motion.div 
+                                    initial={false}
+                                    animate={{ height: hoveredId === index ? 'auto' : 0, opacity: hoveredId === index ? 1 : 0 }}
+                                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                                    className="overflow-hidden"
+                                >
+                                    <p className="text-slate-400 text-sm leading-relaxed pt-2 pb-4 max-w-3xl">
+                                        {job.desc}
+                                    </p>
+                                </motion.div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        };
+
+        const Projects = () => (
+            <section id="projects" className="py-24 px-6 md:px-20 max-w-7xl mx-auto">
+                <SectionHeader title="Projects" icon="folder-git-2" />
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {DATA.projects.map((proj, i) => (
+                        <motion.a 
+                            key={i} 
+                            href={proj.link} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            whileHover={{ y: -5 }} 
+                            className="group p-6 rounded-2xl border border-slate-800 bg-slate-900/50 hover:border-accent/50 transition-all flex flex-col block"
+                        >
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="p-3 rounded-lg bg-slate-800 group-hover:bg-accent group-hover:text-white transition-colors text-slate-400">
+                                    {proj.logo ? (
+                                        <img src={proj.logo} alt={`${proj.title} logo`} className="w-6 h-6 object-contain" />
+                                    ) : (
+                                        <i data-lucide="code-2" className="w-6 h-6"></i>
+                                    )}
+                                </div>
+                                <i data-lucide="arrow-up-right" className="w-5 h-5 text-slate-600 group-hover:text-accent transition-colors"></i>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3 group-hover:text-accent transition-colors">{proj.title}</h3>
+                            <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1">{proj.desc}</p>
+                            <div className="pt-4 border-t border-slate-800">
+                                <p className="text-xs font-mono text-accent/80">{proj.tech}</p>
+                            </div>
+                        </motion.a>
+                    ))}
+                </div>
+            </section>
+        );
+
+        const Footer = () => (
+            <footer className="py-12 border-t border-slate-800 bg-[#020617] text-center">
+                <p className="font-heading font-bold text-2xl text-white mb-2">Abdullah<span className="text-accent">.ai</span></p>
+                <p className="text-slate-500 text-sm">© 2025 Abdullah Felemban. All Rights Reserved.</p>
+            </footer>
+        );
+
+        const App = () => {
+            useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+            return (
+                <div className="relative w-full min-h-screen selection:bg-accent/30 selection:text-white">
+                    <CustomCursor />
+                    <div className="scanlines"></div>
+                    <Navbar />
+                    <main>
+                        <Hero />
+                        <About />
+                        <Publications />
+                        <Experience />
+                        <Projects />
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
