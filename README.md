@@ -4,7 +4,7 @@ This is **Version 2** of my personal portfolio website.
 
 Unlike Version 1 (which was a complex Next.js application), this version is re-engineered for simplicity, performance, and ease of maintenance. It is a lightweight, single-file React application that runs directly in the browser without a heavy build process.
 
-## 🚀 Key Differences (v2 vs v1)
+## Key Differences (v2 vs v1)
 
 | Feature | Version 1 (Old) | Version 2 (Current) |
 | :--- | :--- | :--- |
@@ -13,14 +13,14 @@ Unlike Version 1 (which was a complex Next.js application), this version is re-e
 | **Data Source** | Scattered components | **Centralized embedded Data Object** |
 | **Performance** | Server-Side Rendering | Client-Side Instant Load |
 
-## 🛠 Tech Stack
+## Tech Stack
 
 * **React 18** (via UMD)
 * **Tailwind CSS** (via CDN script)
 * **Framer Motion** (Animations)
 * **Lucide Icons**
 
-## 📂 Structure
+## Structure
 
 The entire website logic, styling, and content are contained within `personal_web.html`. 
 * **Data**: All portfolio information (Bio, Experience, Projects) is stored in a `const DATA` object within the script, making it incredibly easy to update.
